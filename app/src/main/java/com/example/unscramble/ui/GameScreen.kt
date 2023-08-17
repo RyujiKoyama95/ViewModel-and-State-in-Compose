@@ -106,7 +106,7 @@ fun GameScreen(
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = { gameViewModel.checkUserGuess() }
+                onClick = {  }
             ) {
                 Text(
                     text = stringResource(R.string.submit),
