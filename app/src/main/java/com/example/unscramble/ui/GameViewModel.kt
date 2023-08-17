@@ -9,6 +9,7 @@ import com.example.unscramble.data.allWords
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 class GameViewModel: ViewModel() {
 
@@ -30,6 +31,21 @@ class GameViewModel: ViewModel() {
         userGuess = guessWord
     }
 
+    fun checkUserGuess() {
+        Log.d("checkUserGuess", "userGuess=$userGuess currentWord=$currentWord")
+        if (userGuess.equals(currentWord, ignoreCase = true)) {
+
+        } else {
+            Log.d("checkUserGuess", "user guess is not equal")
+            // if user's guess is wrong, show error
+            _uiState.update { gameUiState ->
+                gameUiState.copy(isGuessWordWrong = true)
+            }
+        }
+        // reset userGuess
+        updateUserGuess("")
+    }
+
     /**
      * MutableStateFlowの状態を更新すると、監視側に自動的に更新後の値が通知される。
      * 具体的には、MutableStateFlowのvalueを更新することがトリガーとなる。
@@ -39,18 +55,22 @@ class GameViewModel: ViewModel() {
         Log.d("GameViewModel", "resetGame() step1 _uiState=$_uiState _uiState.value=${_uiState.value} uiState=${uiState.value}")
         usedWords.clear()
 
-        // OK Pattern
-        // _uiState.valueを更新することで、uiStateの状態もそれに追従する
+        /*
+        OK Pattern
+        _uiState.valueを更新することで、uiStateの状態もそれに追従する
+         */
         _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
         Log.d("GameViewModel", "resetGame() step2 _uiState=$_uiState _uiState=${_uiState.value} uiState=${uiState.value}")
 
-        // NG Pattern
-        // _uiStateのインスタンスを更新しちゃっているので、uiStateが参照しているインスタンスとは別物になっているので、状態更新のトリガーはされない
-        _uiState = MutableStateFlow(GameUiState(currentScrambledWord = pickRandomWordAndShuffle()))
-        Log.d("GameViewModel", "resetGame() step3 _uiState=$_uiState _uiState=${_uiState.value} uiState=${uiState.value}")
+        /*
+        NG Pattern
+        _uiStateのインスタンスを更新しちゃっているので、uiStateが参照しているインスタンスとは別物になっているので、状態更新のトリガーはされない
+         */
+        // _uiState = MutableStateFlow(GameUiState(currentScrambledWord = pickRandomWordAndShuffle()))
+        // Log.d("GameViewModel", "resetGame() step3 _uiState=$_uiState _uiState=${_uiState.value} uiState=${uiState.value}")
     }
     private fun pickRandomWordAndShuffle(): String {
-        val currentWord = allWords.random()
+        currentWord = allWords.random()
 
         return if (usedWords.contains(currentWord)) {
             pickRandomWordAndShuffle()
