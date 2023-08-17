@@ -63,11 +63,12 @@ fun GameScreen(
 ) {
     /**
      * これはプロパティデリゲーションの構文を使っています。
-     * この場合、gameViewModel.uiState.collectAsState() の結果が変更された際に、
+     * val gameUiStateを定義した時点では、gameViewModel.uiStateの現在の値を参照し、gameViewModel.uiStateの結果が変更された際に、
      * 自動的に gameUiState も更新されます。
      * つまり、gameViewModel.uiState.collectAsState() の値の変化に gameUiState が追従します。
      */
     val gameUiState by gameViewModel.uiState.collectAsState()
+    Log.d("GameScreen", "gameUiState=$gameUiState")
     val mediumPadding = dimensionResource(R.dimen.padding_medium)
 
     Column(
