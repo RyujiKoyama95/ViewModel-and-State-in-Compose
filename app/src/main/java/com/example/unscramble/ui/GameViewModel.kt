@@ -62,13 +62,16 @@ class GameViewModel: ViewModel() {
      * 具体的には、MutableStateFlowのvalueを更新することがトリガーとなる。
      * 新たにインスタンスを代入しても状態が更新されたとはみなされないので、通知はいかない。
      */
-    private fun resetGame() {
+    fun resetGame() {
         Log.d("GameViewModel", "resetGame() step1 _uiState=$_uiState _uiState.value=${_uiState.value} uiState=${uiState.value}")
         usedWords.clear()
 
         /*
         OK Pattern
         _uiState.valueを更新することで、uiStateの状態もそれに追従する
+
+        GameUiState(currentScrambledWord = pickRandomWordAndShuffle()) で
+        currentScrambledWord以外のプロパティは初期値でインスタンス化することで、GameUiStateをリセット
          */
         _uiState.value = GameUiState(currentScrambledWord = pickRandomWordAndShuffle())
         Log.d("GameViewModel", "resetGame() step2 _uiState=$_uiState _uiState=${_uiState.value} uiState=${uiState.value}")
