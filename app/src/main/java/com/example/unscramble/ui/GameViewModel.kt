@@ -51,6 +51,11 @@ class GameViewModel: ViewModel() {
         updateUserGuess("")
     }
 
+    fun skipWord() {
+        updateGameState(_uiState.value.score)
+        updateUserGuess("")
+    }
+
     /**
      * MutableStateFlowの状態を更新すると、監視側に自動的に更新後の値が通知される。
      * 具体的には、MutableStateFlowのvalueを更新することがトリガーとなる。
